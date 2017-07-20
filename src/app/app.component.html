@@ -1,20 +1,81 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    Welcome to {{title}}!
+    {{title}}
   </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=">
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.ca/">Angular blog</a></h2>
-  </li>
-</ul>
+<div id="success" *ngIf='isSuccessful'>
+  <p>Thank you for registering with us {{ user.firstName }}. We just sent you a confirmation email
+    at {{user.email}}, and we will send all mail to {{user.street}}, {{user.city}}, {{user.state}}.</p>
+    <p>Have a wonderful day!
+    </p>
+</div>
+<div>
+  <p>Items with asterisk (*) are required fields... </p>
+  <form (submit)="onSubmit()" #regForm='ngForm' name='regForm'>
+    
+    <label for="firstName">*First Name:</label>
+    <input type="text" name="firstName" autofocus required maxlength='50' [(ngModel)]='user.firstName' #firstName='ngModel'>
+      
+      <span class="formerrors" *ngIf='!firstName.valid && firstName.dirty'>
+      <i>First Name is required.</i></span><br><br>
+    
+    <label for="lastName">*Last Name:</label>
+    <input type="text" name="lastName" required maxlength='50' [(ngModel)]='user.lastName' #lastName='ngModel'>
+      
+      <span class="formerrors" *ngIf='!lastName.valid && lastName.dirty'>
+      <i>Last Name is required</i></span><br><br>
+    
+    <label for="email">*Email:</label>
+    <input type="email" name="email" required [(ngModel)]='user.email' #email='ngModel'
+      pattern='([a-zA-Z0-9\-\_\"]+)([\_\.\-\+{1}])?([a-zA-Z0-9\-\"\_]+)\@([a-zA-Z0-9\[]+)([\-])?([a-zA-Z0-9]+)?([\.])([a-zA-Z0-9\.\]]+)$'>
+      
+      <span class="formerrors" *ngIf='!email.valid && email.dirty'>
+      <i>Email must be a valid email address.</i></span><br><br>
+    
+    <label for="password">*Password:</label>
+    <input type="password" name="password" required minlength='8' maxlength='50' [(ngModel)]='user.password' #password='ngModel'>
+      
+      <span class="formerrors" *ngIf='!password.valid && password.dirty'>
+      <i>Password must be 8 characters or more (max 50)</i></span><br><br>
+    
+    <label for="cPassword">*Password Confirmation</label>
+    <input type="password" name="cPassword" required [(ngModel)]='user.cPassword' minlength='4' maxlength='50' [pattern]='user.password'  #cPassword='ngModel'>
 
+      <span class="formerrors" *ngIf='!cPassword.valid && cPassword.dirty'>
+      <i>Passwords must match</i></span><br><br>
+
+    <label for="street">*Street Address</label>
+    <input type="text" name="street" required minlength='4' maxlength='50' [(ngModel)]='user.street' #street='ngModel'>
+
+      <span class="formerrors" *ngIf='!street.valid && street.dirty'>
+      <i>Street Address required</i></span><br><br>
+    
+    <label for="suite">Unit/Apt #:</label>
+    <input type="text" name="suite" minlength='1' maxlength='20' [(ngModel)]='user.suite' #suite='ngModel'><br><br>
+      
+    <label for="city">*City:</label>
+    <input type="text" name="city" required minlength='1' maxlength='50' [(ngModel)]='user.city' #city='ngModel'>
+
+      <span class="formerrors" *ngIf='!city.valid && city.dirty'>
+      <i>City is required</i></span><br><br>
+
+    <label for="state">*State:</label>
+    <select name='state' id='state' required [(ngModel)]='user.state' #state='ngModel'>
+        <option value='' selected disabled>Select a state</option>
+        <option *ngFor='let state of states' [value]='state'>{{state}}</option>
+    </select>
+
+      <span class="formerrors" *ngIf='!state.valid && state.dirty'>
+      <i>State is required</i></span><br><br>
+    
+    <label for="lucky">*I'm feeling lucky:</label><br>
+    <input type="radio" name="lucky" required [(ngModel)]='user.lucky' #lucky='ngModel' value='true'>Yes
+    <input type="radio" name="lucky" required [(ngModel)]='user.lucky' #lucky='ngModel' value='false'>No
+  
+      <span class="formerrors" *ngIf='!lucky.valid && lucky.dirty'>
+      <i>You feeling lucky? You have to choose one...</i></span><br><br>
+
+    <input type="submit" [disabled]="!regForm.form.valid" class="btn btn-primary" value="Register">
+    {{ regForm.valid | json }}
+    </form>
+</div>
